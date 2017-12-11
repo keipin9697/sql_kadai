@@ -1,0 +1,121 @@
+
+
+
+_/_/_/_/_/_/_/_/_/_/_/_/  STEP1 部署テーブルの作成 _/_/_/_/_/_/_/_/_/_/_/_/
+
+CREATE TABLE 部署(
+	組織コード 	VARCHAR2(5 CHAR) PRIMARY KEY,
+	名称	   	VARCHAR2(20CHAR) NOT NULL UNIQUE,
+	上位部署コード	VARCHAR2(5 CHAR));
+
+
+_/_/_/_/_/_/_/_/_/_/_/_/  STEP2 社員表テーブルの作成 _/_/_/_/_/_/_/_/_/_/_/_/
+
+
+CREATE TABLE 社員表(
+	社員コード 	VARCHAR2(6 CHAR) PRIMARY KEY,
+	職種		VARCHAR2(3 CHAR) NOT NULL,
+	組織コード	VARCHAR2(5 CHAR) REFERENCES 部署(組織コード),
+	氏名		VARCHAR2(20CHAR) NOT NULL,
+	Emailアドレス	VARCHAR2(20CHAR),
+	職位		VARCHAR2(4 CHAR) NOT NULL);
+
+
+_/_/_/_/_/_/_/_/_/_/_/_/  STEP3 商品タイプテーブルの作成 _/_/_/_/_/_/_/_/_/_/_/_/
+
+
+CREATE TABLE 商品タイプ(
+	商品タイプコード	VARCHAR2(3 CHAR) PRIMARY KEY,
+	商品タイプ名		VARCHAR2(20CHAR)
+);
+
+
+_/_/_/_/_/_/_/_/_/_/_/_/  STEP4 スポーツテーブルの作成 _/_/_/_/_/_/_/_/_/_/_/_/
+
+
+CREATE TABLE スポーツ(
+	スポーツ種別コード	VARCHAR2(3 CHAR) PRIMARY KEY,
+	スポーツ名		VARCHAR2(20CHAR)
+);
+
+
+_/_/_/_/_/_/_/_/_/_/_/_/  STEP5 商品テーブルの作成 _/_/_/_/_/_/_/_/_/_/_/_/
+
+
+CREATE TABLE 商品(
+	商品ID	 		VARCHAR2(10 CHAR) PRIMARY KEY,
+	商品タイプコード	VARCHAR2(3 CHAR) REFERENCES 商品タイプ(商品タイプコード),
+	スポーツ種別コード	VARCHAR2(3 CHAR) REFERENCES スポーツ(スポーツ種別コード),
+	商品名称		VARCHAR2(20CHAR) ,
+	標準単価		NUMBER(6,0),
+	販売可否		NUMBER(1,0) CHECK (販売可否 BETWEEN 0 AND 1));
+
+
+
+_/_/_/_/_/_/_/_/_/_/_/_/  STEP6 顧客テーブルの作成 _/_/_/_/_/_/_/_/_/_/_/_/
+
+
+CREATE TABLE 顧客(
+	顧客ID	 		VARCHAR2(7 CHAR) PRIMARY KEY,
+	顧客名称		VARCHAR2(20 CHAR) NOT NULL,
+	住所			VARCHAR2(50 CHAR),
+	電話番号		VARCHAR2(10 CHAR) ,
+	担当組織コード		VARCHAR2(5 CHAR) REFERENCES 部署(組織コード));
+
+
+_/_/_/_/_/_/_/_/_/_/_/_/  STEP7 受注テーブルの作成 _/_/_/_/_/_/_/_/_/_/_/_/
+
+
+CREATE TABLE 受注(
+	受注ID	 		NUMBER(6,0) PRIMARY KEY,
+	受注年月日		DATE,
+	顧客ID			VARCHAR2(7 CHAR) REFERENCES 顧客(顧客ID),
+	社員コード		VARCHAR2(6 CHAR) REFERENCES 社員表(社員コード) ,
+	発送年月日		DATE);
+
+
+
+_/_/_/_/_/_/_/_/_/_/_/_/  STEP8 受注明細テーブルの作成 _/_/_/_/_/_/_/_/_/_/_/_/
+
+
+CREATE TABLE 受注明細(
+	受注ID	 		NUMBER(6,0) REFERENCES 受注(受注ID),
+	商品ID			VARCHAR2(10 CHAR) REFERENCES 商品(商品ID),
+	受注数量		NUMBER(6,0),
+	販売単価		NUMBER(6,0),
+	PRIMARY KEY(受注ID,商品ID));
+
+
+_/_/_/_/_/_/_/_/_/_/_/_/  STEP9 課目標テーブルの作成 _/_/_/_/_/_/_/_/_/_/_/_/
+
+
+CREATE TABLE 課目標(
+	組織コード 		NUMBER(6,0) PRIMARY KEY REFERENCES 部署(組織コード),
+	第一四半期売上目標	NUMBER(*) NOT NULL,
+	第二四半期売上目標	NUMBER(*) NOT NULL,
+	第三四半期売上目標	NUMBER(*) NOT NULL,
+	第四四半期売上目標	NUMBER(*) NOT NULL,
+	第一四半期粗利目標	NUMBER(*) NOT NULL,
+	第二四半期粗利目標	NUMBER(*) NOT NULL,
+	第三四半期粗利目標	NUMBER(*) NOT NULL,
+	第四四半期粗利目標	NUMBER(*) NOT NULL);
+
+
+_/_/_/_/_/_/_/_/_/_/_/_/  STEP10 営業目標テーブルの作成 _/_/_/_/_/_/_/_/_/_/_/_/
+
+
+CREATE TABLE 営業目標(
+	組織コード 		VARCHAR2(6 CHAR) PRIMARY KEY REFERENCES 社員表(社員コード),
+	第一四半期売上目標	NUMBER(*) NOT NULL,
+	第二四半期売上目標	NUMBER(*) NOT NULL,
+	第三四半期売上目標	NUMBER(*) NOT NULL,
+	第四四半期売上目標	NUMBER(*) NOT NULL,
+	第一四半期粗利目標	NUMBER(*) NOT NULL,
+	第二四半期粗利目標	NUMBER(*) NOT NULL,
+	第三四半期粗利目標	NUMBER(*) NOT NULL,
+	第四四半期粗利目標	NUMBER(*) NOT NULL);
+
+
+
+
+
