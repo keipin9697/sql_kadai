@@ -5,7 +5,7 @@ _/_/_/_/_/_/_/_/_/_/_/_/  STEP1 部署テーブルの作成 _/_/_/_/_/_/_/_/_/_/_/_/
 
 CREATE TABLE 部署(
 	組織コード 	VARCHAR2(5 CHAR) PRIMARY KEY,
-	名称	   	VARCHAR2(20CHAR) NOT NULL,
+	名称	   	VARCHAR2(20CHAR) NOT NULL UNIQUE,
 	上位部署コード	VARCHAR2(5 CHAR));
 
 
@@ -47,7 +47,7 @@ CREATE TABLE 商品(
 	商品タイプコード	VARCHAR2(3 CHAR) REFERENCES 商品タイプ(商品タイプコード),
 	スポーツ種別コード	VARCHAR2(3 CHAR) REFERENCES スポーツ(スポーツ種別コード),
 	商品名称		VARCHAR2(20CHAR) ,
-	標準単価		NUMBER(6,0),
+	標準単価		INTEGER,
 	販売可否		NUMBER(1,0) CHECK (販売可否 BETWEEN 0 AND 1));
 
 
