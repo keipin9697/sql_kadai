@@ -5,7 +5,7 @@ _/_/_/_/_/_/_/_/_/_/_/_/  STEP1 部署テーブルの作成 _/_/_/_/_/_/_/_/_/_/_/_/
 
 CREATE TABLE 部署(
 	組織コード 	VARCHAR2(5 CHAR) PRIMARY KEY,
-	名称	   	VARCHAR2(20CHAR) NOT NULL UNIQUE,
+	名称	   	VARCHAR2(20CHAR) NOT NULL,
 	上位部署コード	VARCHAR2(5 CHAR));
 
 
