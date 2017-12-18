@@ -91,14 +91,14 @@ _/_/_/_/_/_/_/_/_/_/_/_/  STEP9 課目標テーブルの作成 _/_/_/_/_/_/_/_/_/_/_/_/
 
 CREATE TABLE 課目標(
 	組織コード 		VARCHAR2(5 CHAR) PRIMARY KEY REFERENCES 部署(組織コード),
-	第一四半期売上目標	INTEGER NOT NULL,
-	第二四半期売上目標	INTEGER NOT NULL,
-	第三四半期売上目標	INTEGER NOT NULL,
-	第四四半期売上目標	INTEGER NOT NULL,
-	第一四半期粗利目標	INTEGER NOT NULL,
-	第二四半期粗利目標	INTEGER NOT NULL,
-	第三四半期粗利目標	INTEGER NOT NULL,
-	第四四半期粗利目標	INTEGER NOT NULL
+	第1四半期売上目標	INTEGER NOT NULL,
+	第2四半期売上目標	INTEGER NOT NULL,
+	第3四半期売上目標	INTEGER NOT NULL,
+	第4四半期売上目標	INTEGER NOT NULL,
+	第1四半期粗利目標	INTEGER NOT NULL,
+	第2四半期粗利目標	INTEGER NOT NULL,
+	第3四半期粗利目標	INTEGER NOT NULL,
+	第4四半期粗利目標	INTEGER NOT NULL
  	);
 
 
@@ -106,15 +106,15 @@ _/_/_/_/_/_/_/_/_/_/_/_/  STEP10 営業目標テーブルの作成 _/_/_/_/_/_/_/_/_/_/_/_/
 
 
 CREATE TABLE 営業目標(
-	組織コード 		VARCHAR2(6 CHAR) PRIMARY KEY REFERENCES 社員表(社員コード),
-	第一四半期売上目標	INTEGER NOT NULL,
-	第二四半期売上目標	INTEGER NOT NULL,
-	第三四半期売上目標	INTEGER NOT NULL,
-	第四四半期売上目標	INTEGER NOT NULL,
-	第一四半期粗利目標	INTEGER NOT NULL,
-	第二四半期粗利目標	INTEGER NOT NULL,
-	第三四半期粗利目標	INTEGER NOT NULL,
-	第四四半期粗利目標	INTEGER NOT NULL);
+	社員コード 		VARCHAR2(6 CHAR) PRIMARY KEY REFERENCES 社員表(社員コード),
+	第1四半期売上目標	INTEGER NOT NULL,
+	第2四半期売上目標	INTEGER NOT NULL,
+	第3四半期売上目標	INTEGER NOT NULL,
+	第4四半期売上目標	INTEGER NOT NULL,
+	第1四半期粗利目標	INTEGER NOT NULL,
+	第2四半期粗利目標	INTEGER NOT NULL,
+	第3四半期粗利目標	INTEGER NOT NULL,
+	第4四半期粗利目標	INTEGER NOT NULL);
 
 
 
