@@ -117,6 +117,24 @@ CREATE TABLE 営業目標(
 	第4四半期粗利目標	INTEGER NOT NULL);
 
 
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/  STEP11 表示 _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
 
+column 第1四半期売上目標 heading 第1四半期売上目標 format 999,999,999
+column 第2四半期売上目標 heading 第2四半期売上目標 format 999,999,999
+column 第3四半期売上目標 heading 第3四半期売上目標 format 999,999,999
+column 第4四半期売上目標 heading 第4四半期売上目標 format 999,999,999
+column 第1四半期粗利目標 heading 第1四半期粗利目標 format 999,999,999
+column 第2四半期粗利目標 heading 第2四半期粗利目標 format 999,999,999
+column 第3四半期粗利目標 heading 第3四半期粗利目標 format 999,999,999
+column 第4四半期粗利目標 heading 第4四半期粗利目標 format 999,999,999
 
+
+column 商品ID heading 商品ID format A12
+column 商品名称 heading 商品名称 format A30
+
+
+column 顧客ID heading 顧客ID format A12
+column 顧客名称 heading 顧客名称 format A20
+column 住所 heading 住所 format A20
+column 電話番号 heading 電話番号 format A12
