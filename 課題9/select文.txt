@@ -1,0 +1,30 @@
+a-1)
+select	社員コード, 氏名, to_char(sum(受注数量 * 販売単価), '999,999,999,999,999') 売上高, to_char(sum(販売単価 - (0.5 * 標準単価)), '999,999,999,999,999') 粗利
+from	社員表
+natural	join	受注
+natural	join	受注明細
+natural	join	商品
+where	発送年月日 between '2017/04/01' and '2017/06/30'
+group by 社員コード, 氏名
+order by 社員コード;
+
+a-4)
+select	スポーツ名 スポーツ名称, to_char(sum(受注数量 * 販売単価), '999,999,999,999,999') 売上高, to_char(sum(販売単価 - (0.5 * 標準単価)), '999,999,999,999,999') 粗利
+from	スポーツ
+natural join 商品
+natural join 受注明細
+natural join 受注
+where	発送年月日 between '2017/04/01' and '2017/06/30'
+group by スポーツ名
+order by スポーツ名;
+
+a-5)
+select	to_char(発送年月日, 'yyyy"年"MM"月"') 年月, to_char(sum(受注数量 * 販売単価), '999,999,999,999,999') 売上高, to_char(sum(販売単価 - (0.5 * 標準単価)), '999,999,999,999,999') 粗利
+from	受注
+natural join 受注明細
+natural join 商品
+where	発送年月日 between '2017/04/01' and '2017/06/30'
+group by to_char(発送年月日, 'yyyy"年"MM"月"')
+order by 年月;
+
+
