@@ -1,5 +1,5 @@
 a-1)
-select	社員コード, 氏名, to_char(sum(受注数量 * 販売単価), '999,999,999') 売上高, to_char(sum(販売単価 - (0.5 * 標準単価)), '999,999,999') 粗利
+select	社員コード, 氏名, to_char(sum(受注数量 * 販売単価), '999,999,999') 売上高, to_char(sum((販売単価 - (0.5 * 標準単価)) * 受注数量), '999,999,999') 粗利
 from	社員表
 natural	join	受注
 natural	join	受注明細
@@ -9,7 +9,7 @@ group by 社員コード, 氏名
 order by 社員コード;
 
 a-4)
-select	スポーツ名 スポーツ名称, to_char(sum(受注数量 * 販売単価), '999,999,999') 売上高, to_char(sum(販売単価 - (0.5 * 標準単価)), '999,999,999') 粗利
+select	スポーツ名 スポーツ名称, to_char(sum(受注数量 * 販売単価), '999,999,999') 売上高, to_char(sum((販売単価 - (0.5 * 標準単価)) * 受注数量), '999,999,999') 粗利
 from	スポーツ
 natural join 商品
 natural join 受注明細
@@ -19,25 +19,25 @@ group by スポーツ名
 order by スポーツ名;
 
 a-5)
-select	to_char(発送年月日, 'yyyy"年"MM"月"') 年月, to_char(sum(受注数量 * 販売単価), '999,999,999') 売上高, to_char(sum(販売単価 - (0.5 * 標準単価)), '999,999,999') 粗利
-from	受注
+select	to_char(発送年月日, 'yyyy"年"MM"月"') 年月, to_char(sum(受注数量 * 販売単価), '999,999,999') 売上高, to_char(sum((販売単価 - (0.5 * 標準単価)) * 受注数量), '999,999,999') 粗利
+from 商品
 natural join 受注明細
-natural join 商品
+natural join 受注
 where	発送年月日 between '2017/04/01' and '2017/06/30'
 group by to_char(発送年月日, 'yyyy"年"MM"月"')
 order by 年月;
 
 a-6)
-select 商品ID, 商品名称, to_char(sum(受注数量 * 販売単価), '999,999,999') 売上高, to_char(sum(販売単価 - (0.5 * 標準単価)), '999,999,999') 粗利
-from 商品
-natural join	受注明細
-natural join	受注
-where	発送年月日 between '2017/04/01' and '2017/06/30'
-group by 商品ID, 商品名称
+select 商品.商品ID, 商品名称, to_char(sum(受注数量 * 販売単価), '999,999,999') 売上高, to_char(sum((販売単価 - (0.5 * 標準単価)) * 受注数量), '999,999,999') 粗利
+from 商品, 受注明細, 受注
+where	商品.商品ID(+) = 受注明細.商品ID
+and	受注明細.受注ID = 受注.受注ID
+and	発送年月日 between '2017/04/01' and '2017/06/30'
+group by 商品.商品ID, 商品名称
 order by 売上高 desc;
 
 a-7)
-select 顧客ID, 顧客名称,  to_char(sum(受注数量 * 販売単価), '999,999,999') 売上高, to_char(sum(販売単価 - (0.5 * 標準単価)), '999,999,999') 粗利
+select 顧客ID, 顧客名称,  to_char(sum(受注数量 * 販売単価), '999,999,999') 売上高, to_char(sum((販売単価 - (0.5 * 標準単価)) * 受注数量), '999,999,999') 粗利
 from 顧客
 natural join	受注
 natural join	受注明細
@@ -48,22 +48,14 @@ order by 売上高 desc;
 
 
 b)
-select 商品ID, 商品名称, sum(受注数量) 受注数量, to_char(sum(受注数量 * 販売単価), '999,999,999') 売上高
-from 商品
-natural join	受注明細
-natural join	受注
-where	発送年月日 between '2017/04/01' and '2017/06/30'
-group by 商品ID, 商品名称, 受注数量
+select 商品.商品ID, 商品名称, sum(受注数量) 受注数量, to_char(sum(受注数量 * 販売単価), '999,999,999') 売上高
+from  商品, 受注明細
+where 商品.商品ID = 受注明細.商品ID
+group by 商品.商品ID, 商品名称
 order by 売上高 desc;
 
+
 c)
-select 社員コード, 氏名, 第1四半期売上目標, to_char(sum(受注数量 * 販売単価), '999,999,999') 売上高, sum(受注数量 * 販売単価)/第1四半期売上目標 売上達成度, 第1四半期粗利目標, to_char(sum(販売単価 - (0.5 * 標準単価)), '999,999,999') 粗利, sum(販売単価 - (0.5 * 標準単価))/第1四半期粗利目標 粗利達成度
-from 社員表
-natural join	営業目標
-natural join	受注
-natural join	受注明細
-natural join	商品
-group by 社員コード;
 
 d)
 
@@ -71,16 +63,63 @@ e)
 
 f)
 select 受注ID, 受注年月日, 顧客名称 発注元顧客名, 商品ID, 受注数量
-from	受注
-natural join	受注明細
+from       受注
+natural	join	受注明細
 natural	join	顧客
-where	not exists (select 発送年月日
-		from	受注明細
-		where	発送年月日 != '1900/01/01'
-		);
+where	受注年月日 between '2017/04/01' and '2017/06/30'
+and	発送年月日 is null;
 
 
 
+g-1)
+select to_char(sum(受注数量 * 販売単価), '999,999,999') 受注残高
+from	受注
+natural	join	受注明細
+where	受注年月日 between '2017/04/01' and '2017/06/30'
+and	発送年月日 is null;
+
+
+g-2)
+
+
+h)
+select	商品ID, 商品名称
+from	商品
+where 	not exists(select *
+		from	受注明細, 受注
+		where	商品.商品ID = 受注明細.商品ID
+		and	受注.受注ID = 受注明細.受注ID
+		and	発送年月日 between '2017/04/01' and '2017/06/30'
+);
+
+
+j)
+select     受注年月日, 商品ID, 商品名称, 受注数量, 販売単価, 社員コード 担当社員
+from       社員表
+natural    join    受注
+natural join       受注明細
+natural    join    商品
+natural    join    顧客
+where      顧客ID = 'R030002';
+
+
+
+
+5-1~3)
+select	count(*)
+from	顧客;
+
+5-4)
+select sum(標準単価)
+from	商品;
+
+5-5~6)
+select	to_char(sum(販売単価 * 受注数量), '999,999,999') 販売合計額
+from	受注明細;
+
+5-7)
+select	to_char(sum(第1四半期粗利目標), '999,999,999') 粗利目標合計
+from	課目標;
 
 
 
