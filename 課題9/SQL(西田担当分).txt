@@ -259,54 +259,57 @@ SQL> SELECT 名称 部名称,課名称,氏名,TO_CHAR(粗利,'999,999,999') 粗利
 K)
 
 -----------------入力用----------------------------
-CREATE VIEW アドレス帳 AS SELECT 氏名,CASE WHEN 名称='営業本部' THEN 課名称 ELSE 名称||課名称 END 所属,EMAIL
+CREATE VIEW アドレス帳 AS SELECT 氏名,CASE WHEN 名称='営業本部' THEN 課名称 WHEN 課名称='営業本部' THEN '' ELSE 名称||課名称 END 所属,EMAIL
 FROM (SELECT 上位部署コード JYOUI,名称 課名称,社員コード,氏名,EMAILアドレス EMAIL
 	FROM 社員表
 	NATURAL JOIN 部署)
-JOIN 部署 ON(JYOUI=組織コード);
+LEFT OUTER JOIN 部署 ON JYOUI=部署.組織コード
+ORDER BY 社員コード;
 
 
 
 -----------------Word貼り付け用----------------------------
 
-SQL> CREATE VIEW アドレス帳 AS SELECT 氏名,CASE WHEN 名称='営業本部' THEN 課名称 ELSE 名称||課名称 END 所属,EMAIL
+SQL> CREATE VIEW アドレス帳 AS SELECT 氏名,CASE WHEN 名称='営業本部' THEN 課名称 WHEN 課名称='営業本部' THEN '' ELSE 名称||課名称 END 所属,EMAIL
   2  FROM (SELECT 上位部署コード JYOUI,名称 課名称,社員コード,氏名,EMAILアドレス EMAIL
   3     FROM 社員表
   4     NATURAL JOIN 部署)
-  5  JOIN 部署 ON(JYOUI=組織コード);
+  5  LEFT OUTER JOIN 部署 ON JYOUI=部署.組織コード
+  6  ORDER BY 社員コード;
 
 ビューが作成されました。
 
-SQL> SELECT * FROM アドレス帳;
+SQL> select * from アドレス帳;
 
 氏名                                     所属                                                                     EMAIL
 ---------------------------------------- -------------------------------------------------------------------------------- ----------------------------------------
+山田孝志                                                                                                          yamada@daiko.co.jp
 山内敏郎                                 企画部                                                                   yamauchi@daiko.co.jp
 大岡毅夫                                 官公需営業部                                                             oooka@daiko.co.jp
 臼井司郎                                 量販店営業部                                                             usui@daiko.co.jp
 佐藤真一                                 法人営業部                                                               satou@daiko.co.jp
-斎藤剛                                   企画部企画課                                                             saito@daiko.co.jp
-佐藤正暁                                 企画部総務課                                                             msaro@daiko.co.jp
-木庭茂男                                 企画部総理課                                                             koba@daiko.co.jp
 鈴木一郎                                 量販店営業部第1営業課                                                    suzuki@daiko.co.jp
-後藤久                                   量販店営業部第1営業課                                                    goto@daiko.co.jp
-麻生寛                                   量販店営業部第1営業課                                                    aso@daiko.co.jp
-榊原靖史                                 量販店営業部第2営業課                                                    sakaki@daiko.co.jp
-三瓶隆                                   量販店営業部第2営業課                                                    sanbe@daiko.co.jp
-小泉三郎                                 量販店営業部第2営業課                                                    koizumi@daiko.co.jp
-三好弘                                   量販店営業部第2営業課                                                    miyoshi@daiko.co.jp
 大迫治郎                                 量販店営業部第3営業課                                                    oosako@daiko.co.jp
-前田健史                                 量販店営業部第3営業課                                                    maeda@daiko.co.jp
-荒川裕喜                                 量販店営業部第3営業課                                                    ara@daiko.co.jp
-山下剛                                   量販店営業部第3営業課                                                    yama@daiko.co.jp
+木庭茂男                                 企画部総理課                                                             koba@daiko.co.jp
 船田彰男                                 官公需営業部第1営業課                                                    funa@daiko.co.jp
-山下隆盛                                 官公需営業部第1営業課                                                    tyama@daiko.co.jp
-青山誠二                                 官公需営業部第1営業課                                                    ao@daiko.co.jp
+前田健史                                 量販店営業部第3営業課                                                    maeda@daiko.co.jp
 青木明夫                                 官公需営業部第2営業課                                                    aoki@daiko.co.jp
-牛田則夫                                 官公需営業部第2営業課                                                    ushi@daiko.co.jp
-虫明晃子                                 官公需営業部第2営業課                                                    mushi@daiko.co.jp
+斎藤剛                                   企画部企画課                                                             saito@daiko.co.jp
+榊原靖史                                 量販店営業部第2営業課                                                    sakaki@daiko.co.jp
 船場一朗                                 法人営業部第1営業課                                                      fune@daiko.co.jp
+後藤久                                   量販店営業部第1営業課                                                    goto@daiko.co.jp
+佐藤正暁                                 企画部総務課                                                             msaro@daiko.co.jp
+三瓶隆                                   量販店営業部第2営業課                                                    sanbe@daiko.co.jp
+山下隆盛                                 官公需営業部第1営業課                                                    tyama@daiko.co.jp
+牛田則夫                                 官公需営業部第2営業課                                                    ushi@daiko.co.jp
+荒川裕喜                                 量販店営業部第3営業課                                                    ara@daiko.co.jp
 谷木啓文                                 法人営業部第1営業課                                                      yagi@daiko.co.jp
+小泉三郎                                 量販店営業部第2営業課                                                    koizumi@daiko.co.jp
+青山誠二                                 官公需営業部第1営業課                                                    ao@daiko.co.jp
+三好弘                                   量販店営業部第2営業課                                                    miyoshi@daiko.co.jp
+麻生寛                                   量販店営業部第1営業課                                                    aso@daiko.co.jp
+虫明晃子                                 官公需営業部第2営業課                                                    mushi@daiko.co.jp
 前田啓文                                 法人営業部第1営業課                                                      mae@daiko.co.jp
+山下剛                                   量販店営業部第3営業課                                                    yama@daiko.co.jp
 
-27行が選択されました。
+28行が選択されました。
